@@ -113,7 +113,7 @@ const App: React.FC = () => {
         )}
       </main>
       <footer className="text-center py-4 mt-8">
-        <p className="text-gray-500 text-sm">Powered by Gemini AI</p>
+        <p className="text-gray-500 text-sm">Powered by Hannan Hashmi</p>
       </footer>
     </div>
   );

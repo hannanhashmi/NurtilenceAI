@@ -1,5 +1,7 @@
 {
   "name": "NutriLens AI",
   "description": "An AI-powered nutrition and recipe assistant. Upload an image of a food item to get a detailed analysis including calories, macros, health benefits, risks, a recipe, and more.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "camera"
+  ]
 }
