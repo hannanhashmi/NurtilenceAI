@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult } from '../types';
 
@@ -17,8 +16,9 @@ Your response MUST be a single, valid JSON object. Do not include any text befor
 
 
 export const analyzeFoodImage = async (imageData: { mimeType: string; data: string }): Promise<AnalysisResult> => {
-  // Assume process.env.API_KEY is available
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // NOTE: The API key is hardcoded as requested to resolve deployment issues.
+  const apiKey = "AIzaSyDGYXD1vEXEpgISTsbDBAkX398Qb_y3t54";
+  const ai = new GoogleGenAI({ apiKey: apiKey });
 
   const imagePart = {
     inlineData: {
