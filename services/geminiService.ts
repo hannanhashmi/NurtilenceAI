@@ -76,19 +76,31 @@ export const analyzeFoodImage = async (imageData: { mimeType: string; data: stri
       'foodName', 'calories', 'macros', 'healthBenefits', 'risks', 'healthTip', 'recipe'
     ],
   };
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: { parts: [imagePart, textPart] },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: responseSchema,
+      }
+    });
 
-  export async function analyzeFoodImage(base64Image: string, prompt: string) {
-  const response = await fetch("/.netlify/functions/gemini", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ image: base64Image, prompt }),
-  });
+    const jsonText = response.text.trim();
+    const parsedResult = JSON.parse(jsonText) as AnalysisResult;
 
-  if (!response.ok) {
-    throw new Error("Server error: " + response.statusText);
-  }
+    if (parsedResult.isFoodUnclear) {
+      return { isFoodUnclear: true } as AnalysisResult;
+    }
 
-  const data = await response.json();
-  return data.result;
-}
+    return parsedResult;
+  } catch (error) {
+    console.error("Error calling Gemini API:", error);
+    // Re-throw the original error so the UI can display a more specific message
+    if (error instanceof Error) {
+        throw error;
+    }
+    throw new Error("An unexpected error occurred while communicating with the Gemini API.");
+  }
+
 };

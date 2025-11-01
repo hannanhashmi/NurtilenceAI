@@ -15,6 +15,16 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleImageSelect = useCallback((file: File) => {
+    const MAX_FILE_SIZE_MB = 4;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+    
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+        setError(`Image file is too large. Please select an image under ${MAX_FILE_SIZE_MB}MB.`);
+        setImageFile(null);
+        setImageUrl(null);
+        return;
+    }
+
     setImageFile(file);
     setAnalysisResult(null);
     setError(null);
@@ -60,7 +70,11 @@ const App: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      setError('An error occurred during analysis. Please try again.');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred during analysis. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
